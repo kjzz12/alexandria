@@ -33,9 +33,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/scan_button"
-                android:id="@+id/scan_button"/>
+                android:id="@+id/scan_button"
+                android:drawableLeft="@drawable/ic_camera_enhance_black_24dp"/>
 
         </LinearLayout>
+
+        <SurfaceView
+            android:layout_width="640px"
+            android:layout_height="480px"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/eancontainer"
+            android:id="@+id/camera_view"
+            />
 
         <TextView
             android:layout_width="wrap_content"

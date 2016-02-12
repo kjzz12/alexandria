@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -19,6 +20,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import it.jaschke.alexandria.data.AlexandriaContract;
 import it.jaschke.alexandria.services.BookService;
@@ -33,6 +38,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     private final String EAN_CONTENT="eanContent";
     private static final String SCAN_FORMAT = "scanFormat";
     private static final String SCAN_CONTENTS = "scanContents";
+    private SurfaceView camera;
 
     private String mScanFormat = "Format:";
     private String mScanContents = "Contents:";
@@ -55,6 +61,9 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
 
         rootView = inflater.inflate(R.layout.fragment_add_book, container, false);
         ean = (EditText) rootView.findViewById(R.id.ean);
+
+        camera = (SurfaceView) rootView.findViewById(R.id.camera_view);
+        camera.setVisibility(View.GONE);
 
         ean.addTextChangedListener(new TextWatcher() {
             @Override
@@ -102,6 +111,20 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
 
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
+
+                camera = (SurfaceView) rootView.findViewById(R.id.camera_view);
+
+                BarcodeDetector  barcodeDetector =
+                        new BarcodeDetector.Builder(getActivity())
+                                .setBarcodeFormats(Barcode.QR_CODE)
+                                .build();
+
+                CameraSource cameraSource = new CameraSource
+                        .Builder(getActivity(), barcodeDetector)
+                        .setRequestedPreviewSize(640, 480)
+                        .build();
+
+//                camera.setVisibility(View.GONE);
 
             }
         });
